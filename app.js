@@ -10,6 +10,9 @@ app.use(cors()); // Add this line
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Add these lines after app.use(bodyParser.json());
+app.use(express.static(__dirname));
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",

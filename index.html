@@ -4,30 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- localhost/:1 Refused to apply style from 'http://localhost:3000/styles.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled. -->
+    <!-- solution
+        In your appOne.js file, add the following lines to serve static files (CSS and JavaScript) using Express's express.static middleware.
+        This will serve static files from the current directory, which includes your style.css and script.js files.
+    // Add these lines after app.use(bodyParser.json());
+    app.use(express.static(__dirname)); -->
+    <link rel="stylesheet" href="styles.css">
     <title>Book List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 
 <body>
@@ -47,6 +31,9 @@
         <button type="submit">Add Book</button>
     </form>
 
+    <!-- Display success message -->
+    <div id="successMessage" class="hidden">Book added successfully!</div>
+
     <!-- Display the book list -->
     <table id="bookTable">
         <thead>
@@ -59,60 +46,10 @@
         </thead>
         <tbody></tbody>
     </table>
-    <script>
-        // Fetch data from the server and populate the table
-        fetch('/books')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.querySelector('#bookTable tbody');
-                data.forEach(book => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${book.id}</td><td>${book.book_title}</td><td>${book.author_name}</td><td>${book.email}</td>`;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
 
-
-        // Handle form submission
-        document.getElementById('addBookForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const title = document.getElementById('title').value;
-            const author = document.getElementById('author').value;
-            const email = document.getElementById('email').value;
-
-            // Send a POST request to add the new book
-            fetch('/books', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ title, author, email }),
-            })
-                // .then(response => response.json())
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Clear the form fields
-                    document.getElementById('addBookForm').reset();
-
-                    // Refresh the book list
-                    const tableBody = document.querySelector('#bookTable tbody');
-                    tableBody.innerHTML = '';
-                    data.forEach(book => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `<td>${book.id}</td><td>${book.book_title}</td><td>${book.author_name}</td><td>${book.email}</td>`;
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error adding new book:', error.message));
-        })
-    </script>
+    <!-- Notification area -->
+    <div id="notification"></div>
+    <script src="script.js"></script>
 </body>
 
 </html>
