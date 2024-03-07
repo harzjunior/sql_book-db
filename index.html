@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 
 <head>
@@ -60,9 +60,6 @@
         <tbody></tbody>
     </table>
     <script>
-
-
-
         // Fetch data from the server and populate the table
         fetch('/books')
             .then(response => response.json())
@@ -75,6 +72,46 @@
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
+
+
+        // Handle form submission
+        document.getElementById('addBookForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const email = document.getElementById('email').value;
+
+            // Send a POST request to add the new book
+            fetch('/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, author, email }),
+            })
+                // .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Clear the form fields
+                    document.getElementById('addBookForm').reset();
+
+                    // Refresh the book list
+                    const tableBody = document.querySelector('#bookTable tbody');
+                    tableBody.innerHTML = '';
+                    data.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${book.id}</td><td>${book.book_title}</td><td>${book.author_name}</td><td>${book.email}</td>`;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error adding new book:', error.message));
+        })
     </script>
 </body>
 
