@@ -2,7 +2,7 @@
 
 ## About
 
-The Book List Management System is a simple web application that allows users to manage a list of books. Users can view the existing book list, add new books, and experience a streamlined user interface.
+The Book List Management System is a web application that allows users to manage a list of books. Users can view the existing book list, add new books, and experience a streamlined user interface. Additionally, the system supports user authentication, allowing users to create accounts, log in, and manage their book lists securely.
 
 ## Requirements
 
@@ -23,14 +23,23 @@ To run this project, ensure you have the following:
 The project focuses on simplicity and efficiency. Key features include:
 
 - **Book Addition Form**: An intuitive form for adding new books with real-time updates to the book list.
+- **User Authentication**: Secure user accounts with login and account creation features.
 - **Responsive Design**: The user interface adapts to various screen sizes for a seamless experience.
+
+
 
 ## Future Features
 
 The project aims to expand its functionality with upcoming features such as:
 
+### User Authentication
+
+- **Account Creation**: Users can create accounts by providing a unique username and password.
+- **User Login**: Authenticated users can log in using their credentials.
+- **Secure Sessions**: User sessions are managed securely to ensure data privacy.
+
 - **Full CRUD Operations**: Implementing full CRUD (Create, Read, Update, Delete) capabilities for book management.
-- **User Authentication**: Adding user authentication for secure access to the book management system.
+- **Additional Account Management Features**: Enhancing user profiles and adding password recovery functionality.
 
 ## Code Snippets
 
@@ -72,10 +81,11 @@ document.getElementById('addBookForm').addEventListener('submit', function (even
         // ... (existing code) ...
     });
 
-    // Hide success message after 2 seconds
+    // Hide success message after 3 seconds
     setTimeout(() => {
         successMessage.classList.add('hidden');
-    }, 2000);
+    }, 3000);
 });
 ```
+
 ---
