@@ -5,7 +5,8 @@ fetch("/books")
     const tableBody = document.querySelector("#bookTable tbody");
     data.forEach((book) => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${book.id}</td><td>${book.book_title}</td><td>${book.author_name}</td><td>${book.email}</td>`;
+      row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
+      <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
       tableBody.appendChild(row);
     });
   })
@@ -18,8 +19,11 @@ document
     event.preventDefault();
 
     const title = document.getElementById("title").value;
-    const author = document.getElementById("author").value;
-    const email = document.getElementById("email").value;
+    const totalPages = document.getElementById("totalPages").value;
+    const rating = document.getElementById("rating").value;
+    const isbn = document.getElementById("isbn").value;
+    const publishedDate = document.getElementById("publishedDate").value;
+    const publisher = document.getElementById("publisher").value;
 
     // Send a POST request to add the new book
     fetch("/books", {
@@ -27,7 +31,14 @@ document
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, author, email }),
+      body: JSON.stringify({
+        title,
+        totalPages,
+        rating,
+        isbn,
+        publishedDate,
+        publisher,
+      }),
     })
       // .then(response => response.json())
       .then((response) => {
@@ -51,7 +62,8 @@ document
         tableBody.innerHTML = "";
         data.forEach((book) => {
           const row = document.createElement("tr");
-          row.innerHTML = `<td>${book.id}</td><td>${book.book_title}</td><td>${book.author_name}</td><td>${book.email}</td>`;
+          row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
+          <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
           tableBody.appendChild(row);
         });
 

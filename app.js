@@ -45,28 +45,33 @@ app.get("/books", (req, res) => {
 
 // Add this route to handle the POST request for adding a new book
 app.post("/books", (req, res) => {
-  const { title, author, email } = req.body;
+  const { title, totalPages, rating, isbn, publishedDate, publisher } =
+    req.body;
   const query =
-    "INSERT INTO books (book_title, author_name, email) VALUES (?, ?, ?)";
+    "INSERT INTO books (book_title, book_total_page, rating, isbn, published_date, publisher_id) VALUES (?, ?, ?, ?, ?, ?)";
 
   // Execute the query
-  db.query(query, [title, author, email], (error, results) => {
-    if (error) {
-      console.error("Error adding new book to MySQL:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      // Retrieve the updated book list
-      const selectQuery = "SELECT * FROM books";
-      db.query(selectQuery, (selectError, selectResults) => {
-        if (selectError) {
-          console.error("Error fetching data from MySQL:", selectError);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          res.json(selectResults);
-        }
-      });
+  db.query(
+    query,
+    [title, totalPages, rating, isbn, publishedDate, publisher],
+    (error, results) => {
+      if (error) {
+        console.error("Error adding new book to MySQL:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        // Retrieve the updated book list
+        const selectQuery = "SELECT * FROM books";
+        db.query(selectQuery, (selectError, selectResults) => {
+          if (selectError) {
+            console.error("Error fetching data from MySQL:", selectError);
+            res.status(500).json({ error: "Internal Server Error" });
+          } else {
+            res.json(selectResults);
+          }
+        });
+      }
     }
-  });
+  );
 });
 
 // Serve the HTML file
