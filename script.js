@@ -1,3 +1,13 @@
+const options = {
+  timeZone: "Africa/Lagos", // Set to the time zone of West Africa (Lagos)
+  weekday: "long", // Display the full name of the day of the week
+  year: "numeric", // Display the year
+  month: "long", // Display the full name of the month
+  day: "numeric", // Display the day of the month
+  hour: "numeric", // Display the hour (24-hour format)
+  minute: "numeric", // Display the minute
+};
+
 // Fetch data from the server and populate the table
 fetch("/books")
   .then((response) => response.json())
@@ -5,8 +15,12 @@ fetch("/books")
     const tableBody = document.querySelector("#bookTable tbody");
     data.forEach((book) => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
-      <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
+      row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${
+        book.book_total_page
+      }</td>
+      <td>${book.rating}</td><td>${book.isbn}</td><td>${Date(
+        book.published_date
+      )}</td><td>${book.publisher_id}</td>`;
       tableBody.appendChild(row);
     });
   })

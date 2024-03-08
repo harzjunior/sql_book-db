@@ -2,13 +2,13 @@
 
 ## About
 
-The Book List Management System is a web application that allows users to manage a list of books. Users can view the existing book list, add new books, and experience a streamlined user interface. Additionally, the system supports user authentication, allowing users to create accounts, log in, and manage their book lists securely.
+The Book List Management System is a web application that enables users to manage a list of books. Users can view the existing book list, add new books, and experience a streamlined user interface. The system supports user authentication, allowing users to create accounts, log in, and manage their book lists securely.
 
 ## Requirements
 
 To run this project, ensure you have the following:
 
-- Node.js installed on your machine.
+- Node.js (v14.0.0 or higher) installed on your machine.
 - MySQL installed on your machine with the necessary database (`book_db`) and table (`books`) created.
 
 ## Technologies Used
@@ -20,13 +20,11 @@ To run this project, ensure you have the following:
 
 ## Project Efficiency
 
-The project focuses on simplicity and efficiency. Key features include:
+The project focuses on simplicity and efficiency, incorporating the following features:
 
-- **Book Addition Form**: An intuitive form for adding new books with real-time updates to the book list.
+- **Book Addition Form**: Intuitive form for adding new books with real-time updates to the book list.
 - **User Authentication**: Secure user accounts with login and account creation features.
 - **Responsive Design**: The user interface adapts to various screen sizes for a seamless experience.
-
-
 
 ## Future Features
 
@@ -88,4 +86,11 @@ document.getElementById('addBookForm').addEventListener('submit', function (even
 });
 ```
 
----
+## Installation
+
+Follow these steps to set up the project locally:
+
+1. Clone the repository.
+2. Install Node.js dependencies: `npm install`.
+3. Set up MySQL database: create `book_db` and `books` table.
+4. Run the application: `node appOne.js`.
