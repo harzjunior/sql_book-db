@@ -1,69 +1,46 @@
 // Check if the user is logged in (replace 'isLoggedIn' with your actual authentication check)
-const isLoggedIn = true; /* your authentication check here */
+const isLoggedIn = localStorage.getItem("token") !== null;
 
 if (isLoggedIn) {
   document.getElementById("authenticatedContent").style.display = "block";
 }
 
-// Function to show the login modal
+function toggleModal(modalId, show) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = show ? "block" : "none";
+
+  // Toggle nav buttons and search visibility
+  const headerModal = document.getElementById("headerButtons");
+  headerModal.style.display = show ? "none" : "block";
+}
+
 function showLoginModal() {
-  const loginModal = document.getElementById("loginModal");
-  loginModal.style.display = "block";
-
-  //hide nav buttons and search
-  const headerModal = document.getElementById("headerButtons");
-  headerModal.style.display = "none";
+  toggleModal("loginModal", true);
 }
 
-// Function to close the registration modal
 function closeLoginModal() {
-  const registerModal = document.getElementById("loginModal");
-  registerModal.style.display = "none";
-
-  //show nav buttons and search
-  const headerModal = document.getElementById("headerButtons");
-  headerModal.style.display = "block";
+  toggleModal("loginModal", false);
 }
 
-// Function to show the registration modal
 function showRegisterModal() {
-  const registerModal = document.getElementById("registerModal");
-  registerModal.style.display = "block";
-
-  //hide nav buttons and search
-  const headerModal = document.getElementById("headerButtons");
-  headerModal.style.display = "none";
+  toggleModal("registerModal", true);
 }
 
-// Function to close the registration modal
 function closeRegisterModal() {
-  const registerModal = document.getElementById("registerModal");
-  registerModal.style.display = "none";
-
-  //show nav buttons and search
-  const headerModal = document.getElementById("headerButtons");
-  headerModal.style.display = "block";
+  toggleModal("registerModal", false);
 }
 
-// Show login modal when "log into an Account" button is clicked
 document.getElementById("loginBtn").addEventListener("click", showLoginModal);
-
-// Close the registration modal when the close button is clicked
 document
   .getElementById("closeLoginModal")
   .addEventListener("click", closeLoginModal);
-
-// Show registration modal when "Create Account" button is clicked
 document
   .getElementById("createBtn")
   .addEventListener("click", showRegisterModal);
-
-// Close the registration modal when the close button is clicked
 document
   .getElementById("closeRegisterModal")
   .addEventListener("click", closeRegisterModal);
 
-// Close the registration modal when clicking outside the modal
 window.addEventListener("click", (event) => {
   const registerModal = document.getElementById("registerModal");
   if (event.target === registerModal) {
@@ -72,22 +49,27 @@ window.addEventListener("click", (event) => {
 });
 
 // Fetch data from the server and populate the table
-fetch("/books")
-  .then((response) => response.json())
-  .then((data) => {
-    const tableBody = document.querySelector("#bookTable tbody");
-    data.forEach((book) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${
-        book.book_total_page
-      }</td>
-      <td>${book.rating}</td><td>${book.isbn}</td><td>${Date(
-        book.published_date
-      )}</td><td>${book.publisher_id}</td>`;
-      tableBody.appendChild(row);
-    });
-  })
-  .catch((error) => console.error("Error fetching data:", error));
+function fetchDataAndPopulateTable() {
+  fetch("/books")
+    .then((response) => response.json())
+    .then((data) => {
+      const tableBody = document.querySelector("#bookTable tbody");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      data.forEach((book) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
+          <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+}
+
+// If the user is authenticated, fetch data and show book input fields
+if (isLoggedIn) {
+  fetchDataAndPopulateTable();
+}
 
 // Handle form submission
 document
@@ -113,6 +95,7 @@ document
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         title,
@@ -123,7 +106,6 @@ document
         publisher,
       }),
     })
-      // .then(response => response.json())
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -141,14 +123,7 @@ document
         successMessage.classList.remove("hidden");
 
         // Refresh the book list
-        const tableBody = document.querySelector("#bookTable tbody");
-        tableBody.innerHTML = "";
-        data.forEach((book) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
-          <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
-          tableBody.appendChild(row);
-        });
+        fetchDataAndPopulateTable();
 
         // Hide success notification message after 2 seconds
         setTimeout(() => {
@@ -194,6 +169,12 @@ document
 
         // Optional: Redirect to a different page or update UI for authenticated user
         console.log("User logged in successfully!");
+
+        // Clear the input fields
+        document.getElementById("loginForm").reset();
+
+        // Reload the page to fetch updated data and show book input fields
+        location.reload(true);
       })
       .catch((error) => console.error("Error logging in:", error.message));
   });
