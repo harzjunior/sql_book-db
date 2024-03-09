@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,31 +15,78 @@
 </head>
 
 <body>
-    <h1>Book List</h1>
+    <nav class="nav">
+        <h1>Book List</h1>
 
-    <!-- Form for adding new books -->
-    <form id="addBookForm">
-        <!-- New Form Fields for the 'books' table -->
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+        <div id="headerButtons">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button id="loginBtn">Login</button>
+            <button id="createBtn">Create Account</button>
+        </div>
 
-        <label for="totalPages">Total Pages:</label>
-        <input type="number" id="totalPages" name="totalPages" required>
+        <!-- Display login form -->
+        <div style="display: none;" id="loginModal" class="modal">
+            <div class="modal-content">
+                <h2>Login to Account</h2>
+                <form id="loginForm">
+                    <label for="loginUsername">Username:</label>
+                    <input type="text" id="loginUsername" name="loginUsername" required>
 
-        <label for="rating">Rating:</label>
-        <input type="number" id="rating" name="rating" step="0.01" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
 
-        <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="isbn" required>
+                    <button id="loginBtn" type="submit">Login</button>
+                    <span class="close" id="closeLoginModal"><button id="closeLoginBtn">close</button></span>
+                </form>
+            </div>
+        </div>
 
-        <label for="publishedDate">Published Date:</label>
-        <input type="date" id="publishedDate" name="publishedDate" required>
+        <!-- Add a modal for user registration -->
+        <div style="display: none;" id="registerModal" class="modal">
+            <div class="modal-content">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <label for="registerUsername">Username:</label>
+                    <input type="text" id="registerUsername" name="registerUsername" required>
 
-        <label for="publisher">Publisher:</label>
-        <input type="text" id="publisher" name="publisher" required>
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" name="registerPassword" required>
 
-        <button id="submitBtn" type="submit">Add Book</button>
-    </form>
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" name="registerEmail" required>
+
+                    <button type="submit" id="registerBtn">Register</button>
+                    <span class="close" id="closeRegisterModal"><button id="closeBtn">close</button></span>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div id="authenticatedContent" style="display: none;">
+        <!-- Form for adding new books -->
+        <form id="addBookForm">
+            <!-- New Form Fields for the 'books' table -->
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="totalPages">Total Pages:</label>
+            <input type="number" id="totalPages" name="totalPages" required>
+
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" name="rating" step="0.01" required>
+
+            <label for="isbn">ISBN:</label>
+            <input type="text" id="isbn" name="isbn" required>
+
+            <label for="publishedDate">Published Date:</label>
+            <input type="date" id="publishedDate" name="publishedDate" required>
+
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" name="publisher" required>
+
+            <button id="submitBtn" type="submit">Add Book</button>
+        </form>
+    </div>
 
     <!-- Display success message -->
     <div id="successMessage" class="hidden">Book added successfully!</div>

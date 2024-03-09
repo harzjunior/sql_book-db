@@ -5,6 +5,57 @@ body {
   margin: 20px;
 }
 
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Style for header buttons */
+#headerButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+#headerButtons button,
+#registerForm button,
+#loginForm button {
+  margin-left: 10px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#headerButtons button#loginBtn {
+  background-color: #e74c3c; /* Red */
+  color: white;
+}
+
+button#closeBtn {
+  background-color: #e74c3c; /* Red */
+  color: white;
+}
+
+#headerButtons button#createBtn,
+#registerForm button#registerBtn,
+#loginForm button#loginBtn {
+  background-color: #2ecc71; /* Green */
+  color: white;
+}
+
+/* Style for search input */
+#searchInput {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -23,12 +74,14 @@ th {
 }
 
 /* Container for the form, creating a two-column layout */
-#addBookForm {
+#addBookForm,
+#registerForm {
   max-width: 600px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 20px;
+  align-items: center;
 }
 
 /* Style for input labels */

@@ -1,12 +1,75 @@
-const options = {
-  timeZone: "Africa/Lagos", // Set to the time zone of West Africa (Lagos)
-  weekday: "long", // Display the full name of the day of the week
-  year: "numeric", // Display the year
-  month: "long", // Display the full name of the month
-  day: "numeric", // Display the day of the month
-  hour: "numeric", // Display the hour (24-hour format)
-  minute: "numeric", // Display the minute
-};
+// Check if the user is logged in (replace 'isLoggedIn' with your actual authentication check)
+const isLoggedIn = true; /* your authentication check here */
+
+if (isLoggedIn) {
+  document.getElementById("authenticatedContent").style.display = "block";
+}
+
+// Function to show the login modal
+function showLoginModal() {
+  const loginModal = document.getElementById("loginModal");
+  loginModal.style.display = "block";
+
+  //hide nav buttons and search
+  const headerModal = document.getElementById("headerButtons");
+  headerModal.style.display = "none";
+}
+
+// Function to close the registration modal
+function closeLoginModal() {
+  const registerModal = document.getElementById("loginModal");
+  registerModal.style.display = "none";
+
+  //show nav buttons and search
+  const headerModal = document.getElementById("headerButtons");
+  headerModal.style.display = "block";
+}
+
+// Function to show the registration modal
+function showRegisterModal() {
+  const registerModal = document.getElementById("registerModal");
+  registerModal.style.display = "block";
+
+  //hide nav buttons and search
+  const headerModal = document.getElementById("headerButtons");
+  headerModal.style.display = "none";
+}
+
+// Function to close the registration modal
+function closeRegisterModal() {
+  const registerModal = document.getElementById("registerModal");
+  registerModal.style.display = "none";
+
+  //show nav buttons and search
+  const headerModal = document.getElementById("headerButtons");
+  headerModal.style.display = "block";
+}
+
+// Show login modal when "log into an Account" button is clicked
+document.getElementById("loginBtn").addEventListener("click", showLoginModal);
+
+// Close the registration modal when the close button is clicked
+document
+  .getElementById("closeLoginModal")
+  .addEventListener("click", closeLoginModal);
+
+// Show registration modal when "Create Account" button is clicked
+document
+  .getElementById("createBtn")
+  .addEventListener("click", showRegisterModal);
+
+// Close the registration modal when the close button is clicked
+document
+  .getElementById("closeRegisterModal")
+  .addEventListener("click", closeRegisterModal);
+
+// Close the registration modal when clicking outside the modal
+window.addEventListener("click", (event) => {
+  const registerModal = document.getElementById("registerModal");
+  if (event.target === registerModal) {
+    closeRegisterModal();
+  }
+});
 
 // Fetch data from the server and populate the table
 fetch("/books")
@@ -31,6 +94,12 @@ document
   .getElementById("addBookForm")
   .addEventListener("submit", function (event) {
     event.preventDefault();
+
+    // Check if the user is logged in before allowing book addition
+    if (!isLoggedIn) {
+      alert("Please log in or create an account to add a book.");
+      return;
+    }
 
     const title = document.getElementById("title").value;
     const totalPages = document.getElementById("totalPages").value;
@@ -87,4 +156,85 @@ document
         }, 2000);
       })
       .catch((error) => console.error("Error adding new book:", error.message));
+  });
+
+// Handle user login
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const loginUsername = document.getElementById("loginUsername").value;
+    const loginPassword = document.getElementById("loginPassword").value;
+
+    // Send a POST request to authenticate the user
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        loginUsername,
+        loginPassword,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Server error: ${response.status} ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Assuming the server sends a token upon successful login
+        const token = data.token;
+        // Store the token securely (e.g., in localStorage) for future authenticated requests
+        localStorage.setItem("token", token);
+
+        // Optional: Redirect to a different page or update UI for authenticated user
+        console.log("User logged in successfully!");
+      })
+      .catch((error) => console.error("Error logging in:", error.message));
+  });
+
+// Handle user registration
+document
+  .getElementById("registerForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const registerUsername = document.getElementById("registerUsername").value;
+    const registerPassword = document.getElementById("registerPassword").value;
+    const registerEmail = document.getElementById("registerEmail").value;
+
+    // Send a POST request to register the user
+    fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        registerUsername,
+        registerPassword,
+        registerEmail,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Server error: ${response.status} ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Clear the form fields
+        document.getElementById("registerForm").reset();
+        console.log(data); // Log the response for debugging
+        alert("User registered successfully!");
+      })
+      .catch((error) =>
+        console.error("Error registering user:", error.message)
+      );
   });
