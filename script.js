@@ -5,6 +5,25 @@ if (isLoggedIn) {
   document.getElementById("authenticatedContent").style.display = "block";
 }
 
+function toggleButtonsVisibility(loggedIn) {
+  const loginBtn = document.getElementById("loginBtn");
+  const createBtn = document.getElementById("createBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (loggedIn) {
+    loginBtn.style.display = "none";
+    createBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+  } else {
+    loginBtn.style.display = "block";
+    createBtn.style.display = "block";
+    logoutBtn.style.display = "none";
+  }
+}
+
+// Set initial visibility of buttons
+toggleButtonsVisibility(isLoggedIn);
+
 function toggleModal(modalId, show) {
   const modal = document.getElementById(modalId);
   modal.style.display = show ? "block" : "none";
@@ -40,6 +59,21 @@ document
 document
   .getElementById("closeRegisterModal")
   .addEventListener("click", closeRegisterModal);
+
+// Logout functionality
+document.getElementById("logoutBtn").addEventListener("click", function () {
+  // Clear the token from localStorage
+  localStorage.removeItem("token");
+
+  // Set visibility of buttons after logout
+  toggleButtonsVisibility(false);
+
+  // Optionally, you can redirect to the login page or perform other actions
+  console.log("User logged out successfully!");
+
+  // Reload the page to fetch updated data and show book input fields
+  location.reload(true);
+});
 
 window.addEventListener("click", (event) => {
   const registerModal = document.getElementById("registerModal");
