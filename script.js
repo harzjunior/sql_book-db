@@ -253,3 +253,31 @@ document
         console.error("Error registering user:", error.message)
       );
   });
+
+// Search functionality
+document
+  .getElementById("searchInput")
+  .addEventListener("input", function (event) {
+    const searchTerm = event.target.value.trim().toLowerCase();
+
+    // Fetch data from the server and filter based on the search term
+    fetch("/books")
+      .then((response) => response.json())
+      .then((data) => {
+        const tableBody = document.querySelector("#bookTable tbody");
+        tableBody.innerHTML = ""; // Clear existing table rows
+
+        data.forEach((book) => {
+          // Check if the book title contains the search term
+          if (book.book_title.toLowerCase().includes(searchTerm)) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${book.book_id}</td><td>${book.book_title}</td><td>${book.book_total_page}</td>
+                <td>${book.rating}</td><td>${book.isbn}</td><td>${book.published_date}</td><td>${book.publisher_id}</td>`;
+            tableBody.appendChild(row);
+          }
+        });
+      })
+      .catch((error) =>
+        console.error("Error fetching and filtering data:", error)
+      );
+  });
