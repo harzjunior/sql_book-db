@@ -5,6 +5,14 @@ if (isLoggedIn) {
   document.getElementById("authenticatedContent").style.display = "block";
 }
 
+// Show add book input fields when "Post Book" button is clicked
+document.getElementById("postBookBtn").addEventListener("click", function () {
+  // Toggle the visibility of the add book form
+  const addBookForm = document.getElementById("addBookForm");
+  addBookForm.style.display =
+    addBookForm.style.display === "none" ? "block" : "block";
+});
+
 function toggleButtonsVisibility(loggedIn) {
   const loginBtn = document.getElementById("loginBtn");
   const createBtn = document.getElementById("createBtn");
@@ -173,8 +181,11 @@ document
   .addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const loginUsername = document.getElementById("loginUsername").value;
-    const loginPassword = document.getElementById("loginPassword").value;
+    const loginUsernameInput = document.getElementById("loginUsername");
+    const loginPasswordInput = document.getElementById("loginPassword");
+
+    const loginUsername = loginUsernameInput.value;
+    const loginPassword = loginPasswordInput.value;
 
     // Send a POST request to authenticate the user
     fetch("/login", {
@@ -189,6 +200,10 @@ document
     })
       .then((response) => {
         if (!response.ok) {
+          // Add a class to the input fields when authentication fails
+          loginUsernameInput.classList.add("error");
+          loginPasswordInput.classList.add("error");
+
           throw new Error(
             `Server error: ${response.status} ${response.statusText}`
           );

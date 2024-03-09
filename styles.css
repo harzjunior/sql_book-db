@@ -56,6 +56,12 @@ button#closeBtn {
   box-sizing: border-box;
 }
 
+/* Add error styles for login input fields */
+#loginUsername.error,
+#loginPassword.error {
+  border: 1px solid #e74c3c; /* Red border for error state */
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
