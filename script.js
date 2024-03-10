@@ -7,10 +7,19 @@ if (isLoggedIn) {
 
 // Show add book input fields when "Post Book" button is clicked
 document.getElementById("postBookBtn").addEventListener("click", function () {
-  // Toggle the visibility of the add book form
-  const addBookForm = document.getElementById("addBookForm");
-  addBookForm.style.display =
-    addBookForm.style.display === "none" ? "block" : "block";
+  // Check if the user is logged in before showing the form
+  if (isLoggedIn) {
+    // Toggle the visibility of the add book form
+    const addBookForm = document.getElementById("addBookForm");
+    addBookForm.style.display =
+      addBookForm.style.display === "none" ? "block" : "none";
+  } else {
+    // If the user is not logged in, you can redirect to the login page or perform other actions
+    document.getElementById("postBookBtn").style.display = "none";
+    alert("Please log in or create an account to post a book.");
+    // Alternatively, you can redirect to the login page
+    // window.location.href = "/login"; // Replace "/login" with your login page URL
+  }
 });
 
 function toggleButtonsVisibility(loggedIn) {
@@ -183,9 +192,13 @@ document
 
     const loginUsernameInput = document.getElementById("loginUsername");
     const loginPasswordInput = document.getElementById("loginPassword");
+    const errorMessages = document.getElementById("errorMessages");
 
     const loginUsername = loginUsernameInput.value;
     const loginPassword = loginPasswordInput.value;
+
+    // Clear any existing error messages
+    errorMessages.innerHTML = "";
 
     // Send a POST request to authenticate the user
     fetch("/login", {
@@ -200,6 +213,9 @@ document
     })
       .then((response) => {
         if (!response.ok) {
+          // Display error message
+          errorMessages.innerHTML = "Invalid username or password.";
+
           // Add a class to the input fields when authentication fails
           loginUsernameInput.classList.add("error");
           loginPasswordInput.classList.add("error");
@@ -218,6 +234,13 @@ document
 
         // Optional: Redirect to a different page or update UI for authenticated user
         console.log("User logged in successfully!");
+
+        // Clear the input fields and remove the error class and messages
+        loginUsernameInput.value = "";
+        loginPasswordInput.value = "";
+        loginUsernameInput.classList.remove("error");
+        loginPasswordInput.classList.remove("error");
+        errorMessages.innerHTML = "";
 
         // Clear the input fields
         document.getElementById("loginForm").reset();
