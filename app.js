@@ -168,6 +168,59 @@ app.post("/books", (req, res) => {
   );
 });
 
+// Define a route to handle GET requests to fetch users
+app.get("/users", (req, res) => {
+  const query = "SELECT * FROM users";
+
+  // Query the database to fetch user data
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error fetching user data from MySQL:", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      // Send the fetched user data as a JSON response
+      res.json(results);
+    }
+  });
+});
+
+// // Define a route to handle user approval
+// app.post("/approve-user/:userId", (req, res) => {
+//   const userId = req.params.userId;
+//   // Logic to approve the user with the given userId
+//   // For example, you can update the user's status in the database
+//   const approveUserQuery =
+//     "UPDATE users SET status = 'approved' WHERE user_id = ?";
+//   db.query(approveUserQuery, [userId], (error, results) => {
+//     if (error) {
+//       console.error("Error approving user:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       res.json({ message: "User approved successfully" });
+//     }
+//   });
+// });
+
+// Handle POST requests to log user actions
+app.post("/log-user-action", (req, res) => {
+  const { userId, action } = req.body;
+
+  // Insert the user action into the user_actions table
+  const query =
+    "INSERT INTO user_actions (user_id, action, timestamp) VALUES (?, ?, NOW())";
+  db.query(query, [userId, action], (error, results) => {
+    if (error) {
+      console.error("Error logging user action:", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      console.log(
+        `User action ${action} for user with ID ${userId} logged successfully.`
+      );
+      res.status(200).send("User action logged successfully");
+    }
+  });
+});
+
 // Serve the HTML file
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
